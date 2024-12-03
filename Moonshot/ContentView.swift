@@ -10,12 +10,16 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image("duke")
-                .resizable()
-                .scaledToFit()
-                .containerRelativeFrame(.horizontal){ size, axis in
-                    size * 0.5
+            
+            ScrollView(.horizontal){
+                LazyHStack(spacing: 10) {
+                    ForEach(0..<100) {
+                        Text("Item \($0)")
+                            .font(.title)
+                    }
                 }
+                .frame(maxWidth:.infinity)
+            }
         }
            
     }

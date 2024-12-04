@@ -9,18 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            
-            ScrollView(.horizontal){
-                LazyHStack(spacing: 10) {
-                    ForEach(0..<100) {
-                        Text("Item \($0)")
-                            .font(.title)
-                    }
+        NavigationStack{
+            List(0..<100, id: \.self){ row in
+                NavigationLink("Row \(row)"){
+                    Text("Detail \(row)")
                 }
-                .frame(maxWidth:.infinity)
             }
         }
+    
            
     }
 }
@@ -28,3 +24,13 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+
+//NavigationStack {
+//    List(0..<100) { row in
+//        NavigationLink("Row \(row)") {
+//            Text("Detail \(row)")
+//        }
+//    }
+//    .navigationTitle("SwiftUI")
+//}

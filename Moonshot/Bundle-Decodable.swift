@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Bundle {
-    func decode(_ file: String) -> [String: Astronaut]{
+    func decode<T: Codable>(_ file: String) -> T{
         guard let url = self.url(forResource: file, withExtension: nil) else{
             fatalError("failed to locate \(file)")
         }
@@ -16,7 +16,7 @@ extension Bundle {
             fatalError("failed to load \(file)")
         }
         
-        guard let loaded = try? JSONDecoder().decode([String: Astronaut].self, from: data) else{
+        guard let loaded = try? JSONDecoder().decode(T.self, from: data) else{
             fatalError("failed to decode \(file)")
         }
         return loaded

@@ -19,9 +19,23 @@ struct Mission: Codable, Identifiable {
         let role: String
     }
     let id: Int
-    let launchDate: String?
+    let launchDate: Date?
     let crew: [CrewRole]
     let description: String
+    
+    var displayName: String{
+        "Apollo \(id)"
+    }
+    
+    var image: String{
+        "apollo\(id)"
+    }
+    var formattedLaunchDate: String{
+        let temp = launchDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A"
+        print(type(of:temp)) // just to check whether output is non optional or optional
+        return temp
+        
+    }
     
 }
 
@@ -30,12 +44,48 @@ struct Mission: Codable, Identifiable {
 struct ContentView: View {
     let astronauts: [String: Astronaut] =  Bundle.main.decode("astronauts.json")
     let missions: [Mission] = Bundle.main.decode("missions.json")
-     
+    let columns = [GridItem(.adaptive(minimum: 150))]
     var body: some View{
-        Text(String(astronauts.count))
-            .onAppear {
-                           print("Astronauts: \(astronauts)")
-                       }
+        NavigationStack{
+            ScrollView{
+                LazyVGrid(columns: columns, spacing: 100){
+                    ForEach(missions){ mission in
+                        NavigationLink{
+                            Text("Detail View")
+                        }
+                        label:{
+                            VStack{
+                                Image(mission.image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width:100, height:100)
+                                    .padding()
+                                VStack{
+                                    Text(mission.displayName)
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                    Text(mission.formattedLaunchDate)
+                                        .font(.caption)
+                                        .foregroundStyle(.white.opacity(0.5))
+                                }
+                                .padding(.vertical)
+                                .frame(maxWidth: .infinity)
+                                .background(.lightBackground)
+                            }
+                            .clipShape(.rect(cornerRadius: 10))
+                            .overlay(RoundedRectangle(cornerRadius:10).stroke(.lightBackground))
+                            
+                                
+                        }
+                    }
+                }.padding([.horizontal, .bottom])
+            }
+            .padding(.top, 50)
+            .navigationTitle("Moonshot")
+            .background(.darkBackground)
+            .preferredColorScheme(.dark)
+        }
+        
         
     }
    
